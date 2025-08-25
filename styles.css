@@ -1,0 +1,108 @@
+body {
+    font-family: 'Noto Sans', sans-serif; /* フォールバックとしてsans-serifを指定 */
+    background-color:#202020;
+	color:#DDDDDD;
+    margin : 20px;
+}
+
+h1 {
+	text-align:left;
+    font-size: 2.0em;
+    font-weight: 400;
+}
+
+h2 {
+    font-weight: 200;
+    text-align:left;
+    background-color: #1e1f68;
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-top: 2px;
+    padding-bottom: 5px;
+}
+
+.event-info {
+    margin: 4px;
+}
+
+.schedule-text {
+    word-wrap: break-word; /* 折り返しを有効にする */
+    display: block;
+    line-height: 1.2; /* 行間を調整 */
+}
+
+.schedule-musabi {
+    color: #797979;
+}
+
+
+.event-info-web p, a {
+    display: inline;
+}
+
+.content {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 40px;
+    border-bottom: 1px solid #696969;
+    padding-bottom: 20px; 
+    margin-bottom: 0%; 
+}
+
+.cotent-index {
+    font-size: 1.5em;
+    color: #CCC;
+    margin-top: 2%;
+    margin-bottom: 1%;
+}
+
+.images {
+    flex: 1;
+    margin-right: 20px;
+}
+
+.text {
+    flex: 1.5;
+}
+
+.key-visual img {
+    width: 100%;
+    height: auto;
+    display: block;
+    margin-bottom: 10px;
+}
+
+.sub-visuals {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    gap: 10px;
+}
+
+.sub-visuals img {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+.creator {
+    font-size: 1.3em;  /* 少し大きめ */
+    font-weight: bold;
+    color: #CCC;
+}
+
+.title {
+    font-size: 1.6666666em;  /* さらに大きく、タイトルを目立たせる */
+    font-weight: bold;
+    color: #CCC;
+}
+
+.duration {
+    font-size: 1.0em;  /* 標準サイズ */
+    color: #CCC;
+}
+
+.othercredits {
+	font-size: 1.0em;  /* 標準サイズ */
+    color: #18ae68;
+}
+
