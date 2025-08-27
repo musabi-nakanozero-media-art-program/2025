@@ -102,7 +102,20 @@ h2 {
 }
 
 .othercredits {
-	font-size: 1.0em;  /* 標準サイズ */
+	font-size: 1.0em;  
     color: #6fd1cf;
 }
 
+/* othercredits の中のリンクだけ色を指定 */
+.othercredits a:link    { color: #788df5} /* 通常 */
+.othercredits a:visited { color: #788df5} /* 既訪問 */
+.othercredits a:hover,
+.othercredits a:focus-visible { 
+  color: #5b59c0;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+.othercredits a:active  { color: #0369a1; }
+
+/* 長いURLの折り返し */
+.othercredits { overflow-wrap: anywhere; }

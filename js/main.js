@@ -32,8 +32,8 @@ $(document).ready(function(){
 							<span class="title">${item.title}</span>
 							<span class="duration">&nbsp;&nbsp;(${Math.floor(item.videoduration / 60)}分${item.videoduration % 60}秒)</span>
 						</p>
-						<p class="othercredits">${toHtmlWithBr(item.othercredits)}</p>
-      					<p>${toHtmlWithBr(item.description)}</p>
+						<p class="othercredits">${toHtmlWithBr(item.othercredits, { linkify: true })}</p>
+						<p>${toHtmlWithBr(item.description)}</p>
 					</div>
 				</div>
 			`;
@@ -47,20 +47,52 @@ function zeroPad(number) {
     return number.toString().padStart(2, '0');
 }
 
-function toHtmlWithBr(text) {
-  if (text == null) return '';
-  // まずHTMLエスケープ
-  const escaped = String(text)
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;');
+// HTMLエスケープ
+function escapeHtml(str) {
+  return String(str)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;");
+}
 
-  // 改行の揺れを統一：CRLF/CR→LF、そして「文字としての \n」もLFへ
-  const unifiedLF = escaped
-    .replace(/\r\n/g, '\n')
-    .replace(/\r/g, '\n')
-    .replace(/\\n/g, '\n');
+// href用のエスケープ（属性値）
+function escapeAttr(str) {
+  return String(str)
+    .replace(/&/g, "&amp;")
+    .replace(/"/g, "&quot;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;");
+}
+
+// すでにエスケープ済みテキスト中の URL を <a> にする
+function linkifyEscapedText(escapedText) {
+  // http(s) or www. で始まるURLをざっくり検出
+  const urlRe = /(?:https?:\/\/|www\.)[^\s<>"']+/gi;
+
+  return escapedText.replace(urlRe, (m) => {
+    let display = m;                  // 画面表示用（すでにエスケープ済み）
+    let href = m.startsWith("www.") ? "http://" + m : m; // www.はhttp付与
+    href = escapeAttr(href);          // href属性用にエスケープ
+    return `<a href="${href}" target="_blank" rel="noopener noreferrer">${display}</a>`;
+  });
+}
+
+// 改行(\\n, \r\n, \r)を <br> に、必要に応じてURLをリンク化
+function toHtmlWithBr(text, { linkify = false } = {}) {
+  if (text == null) return "";
+  // 改行の揺れを統一 + 「文字としての \n」を実際の改行へ
+  let s = String(text)
+    .replace(/\r\n/g, "\n")
+    .replace(/\r/g, "\n")
+    .replace(/\\n/g, "\n");
+
+  // まず全文をエスケープ
+  s = escapeHtml(s);
+
+  // URLだけ <a> にする
+  if (linkify) s = linkifyEscapedText(s);
 
   // 最後に <br> へ
-  return unifiedLF.replace(/\n/g, '<br>');
+  return s.replace(/\n/g, "<br>");
 }
