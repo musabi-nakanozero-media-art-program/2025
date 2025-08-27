@@ -32,9 +32,8 @@ $(document).ready(function(){
 							<span class="title">${item.title}</span>
 							<span class="duration">&nbsp;&nbsp;(${Math.floor(item.videoduration / 60)}分${item.videoduration % 60}秒)</span>
 						</p>
-						<p class="othercredits">${item.othercredits}</p>
-						<p> </p>
-						<p>${item.description}</p>
+						<p class="othercredits">${toHtmlWithBr(item.othercredits)}</p>
+      					<p>${toHtmlWithBr(item.description)}</p>
 					</div>
 				</div>
 			`;
@@ -46,4 +45,22 @@ $(document).ready(function(){
 
 function zeroPad(number) {
     return number.toString().padStart(2, '0');
+}
+
+function toHtmlWithBr(text) {
+  if (text == null) return '';
+  // まずHTMLエスケープ
+  const escaped = String(text)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;');
+
+  // 改行の揺れを統一：CRLF/CR→LF、そして「文字としての \n」もLFへ
+  const unifiedLF = escaped
+    .replace(/\r\n/g, '\n')
+    .replace(/\r/g, '\n')
+    .replace(/\\n/g, '\n');
+
+  // 最後に <br> へ
+  return unifiedLF.replace(/\n/g, '<br>');
 }
