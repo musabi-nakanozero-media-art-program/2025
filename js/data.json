@@ -12,7 +12,7 @@
         "subvisual02": "矢野龍一_sub_02.png",
         "subvisual03": "矢野龍一_sub_03.png",
         "subvisual04": "",
-        "description": "",
+        "description": "宇宙を旅するクラブハウス",
         "othercredits": "音楽：千葉理平",
         "website": ""
     },
@@ -178,12 +178,12 @@
         "title": "Ambiguity",
         "videoduration": 148,
         "keyvisual": "オウギョウ_key.png",
-        "subvisual01": "",
-        "subvisual02": "",
-        "subvisual03": "",
-        "subvisual04": "",
+        "subvisual01": "オウギョウ_sub_01.png",
+        "subvisual02": "オウギョウ_sub_02.png",
+        "subvisual03": "オウギョウ_sub_03.png",
+        "subvisual04": "オウギョウ_sub_04.png",
         "description": "線から始まり、機械学習とアルゴリズムによって生成された網状の構造は、機械から新たなかたちの知覚を生み出す。この作品は、スキャンデータから生成した要素を統合し、完成したイメージそのものではなく、それが生成される「過程」を表現している",
-        "othercredits": "",
+        "othercredits": "音楽：自作",
         "website": ""
     },
 	{
