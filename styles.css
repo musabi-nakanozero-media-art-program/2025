@@ -35,6 +35,9 @@ h2 {
     color: #797979;
 }
 
+.schedule-notes-text {
+    color: #61bdc0;
+}
 
 .event-info-web p, a {
     display: inline;
