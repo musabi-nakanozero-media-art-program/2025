@@ -330,26 +330,7 @@
     tx = e.touches[0].clientX; ty = e.touches[0].clientY; lastInteract = Date.now();
   }, { passive: true });
 
-  var useGyro = false, gyroAlpha = 0, gyroBeta = 90;
-  function onOrientation(e) {
-    if (e.alpha === null) return;
-    useGyro = true; gyroAlpha = e.alpha; gyroBeta = e.beta; lastInteract = Date.now();
-  }
-  function enableGyro() { window.addEventListener('deviceorientation', onOrientation); }
-  if (typeof DeviceOrientationEvent !== 'undefined' &&
-      typeof DeviceOrientationEvent.requestPermission === 'function') {
-    document.addEventListener('click', function req() {
-      DeviceOrientationEvent.requestPermission()
-        .then(function (s) { if (s === 'granted') enableGyro(); })
-        .catch(function () {});
-      document.removeEventListener('click', req);
-    }, { once: true });
-  } else if ('DeviceOrientationEvent' in window) {
-    enableGyro();
-  }
-
-  function clampPhi(v)  { return Math.max(0.08, Math.min(Math.PI - 0.08, v)); }
-  function degToRad(d) { return d * Math.PI / 180; }
+  function clampPhi(v) { return Math.max(0.08, Math.min(Math.PI - 0.08, v)); }
 
   /* ── アニメーションループ ── */
   function animate() {
@@ -365,10 +346,7 @@
       }
     }
 
-    if (useGyro) {
-      tPhi   = clampPhi(degToRad(90 - gyroBeta));
-      tTheta = degToRad(gyroAlpha);
-    } else if (Date.now() - lastInteract > 4000) {
+    if (Date.now() - lastInteract > 4000) {
       tTheta += 0.00035;
     }
 

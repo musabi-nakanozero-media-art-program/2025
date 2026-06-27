@@ -357,13 +357,13 @@ dd {
 
 /* サムネイルストリップ（最大5枚） */
 .work-thumbs {
-  display: flex;
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: 1fr;
   gap: 0.45rem;
-  flex-wrap: wrap;
   margin-top: 0.65rem;
 }
 .work-thumb {
-  flex: 0 0 calc((100% - 1.8rem) / 5);
   aspect-ratio: 1 / 1;
   border-radius: 50%;
   overflow: hidden;
@@ -372,6 +372,7 @@ dd {
   padding: 0;
   cursor: pointer;
   transition: border-color 0.2s, opacity 0.2s;
+  min-width: 0;
 }
 .work-thumb img {
   width: 100%;
