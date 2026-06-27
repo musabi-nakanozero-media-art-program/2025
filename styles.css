@@ -448,12 +448,14 @@ dd {
   color: var(--fg-mid);
   line-height: 1.75;
   margin-top: 0.25rem;
+  overflow-wrap: anywhere;
 }
 .work-credits {
   font-size: 0.78rem;
   color: var(--fg-dim);
   line-height: 1.65;
   margin-top: 0.25rem;
+  overflow-wrap: anywhere;
 }
 .work-website {
   display: inline-block;
