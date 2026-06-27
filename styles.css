@@ -609,7 +609,10 @@ footer {
 
 @media (max-width: 480px) {
   .hero-title { font-size: clamp(1.75rem, 10vw, 3rem); }
-  .container { padding: 0 1.25rem; }
-  .nav-inner { padding: 0 1.25rem; }
+  .container { padding: 0 1rem; }
+  .nav-inner { padding: 0 1rem; }
   .nav-logo-main { font-size: 0.78rem; }
+  .work-card { padding: 1rem; }
+  .work-meta { flex-wrap: wrap; }
+  .work-duration { margin-left: 0; }
 }
