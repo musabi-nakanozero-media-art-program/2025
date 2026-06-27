@@ -1,98 +1,179 @@
-$(document).ready(function(){
-	$.getJSON('./js/data.json', function(data){
-		// JSON配列をループ
-		$.each(data, function(index, item){
-			// メインビジュアルがある場合のみ生成
-            var keyVisual = item.keyvisual ? `<img src="./img/${item.keyvisual}" alt="mainvisual" class="main-images">` : '';
+/**
+ * main.js — data.json を読み込んで作品カードを生成
+ *
+ * - サブ画像クリック/タップでメイン画像切り替え
+ * - 作品インデックス表示（No.01 …）
+ */
+(function () {
+  'use strict';
 
-            // サブビジュアルがある場合のみ生成
-            var subVisual1 = item.subvisual01 ? `<img src="./img/${item.subvisual01}" alt="subvisual1">` : '';
-            var subVisual2 = item.subvisual02 ? `<img src="./img/${item.subvisual02}" alt="subvisual2">` : '';
-            var subVisual3 = item.subvisual03 ? `<img src="./img/${item.subvisual03}" alt="subvisual3">` : '';
-            var subVisual4 = item.subvisual04 ? `<img src="./img/${item.subvisual04}" alt="subvisual4">` : '';
-		
-			var contentDiv = `
-				<div class="cotent-index"> ${zeroPad(item.id+1)} </div>
-				<div class="content">
-					<div class="images">
-						<div class="key-visual">
-							${keyVisual}
-						</div>
-						<div class="sub-visuals">
-							${subVisual1}
-							${subVisual2}
-							${subVisual3}
-							${subVisual4}
-						</div>
-					</div>
-					<div class="text">
-						<p><span class="school">${item.school} ${item.department} ${item.seminar}</span></p>                  
-						<p><span class="creator">${item.name}</span></p>
-						<p>
-							<span class="title">${item.title}</span>
-							<span class="duration">&nbsp;&nbsp;(${Math.floor(item.videoduration / 60)}分${item.videoduration % 60}秒)</span>
-						</p>
-						<p class="othercredits">${toHtmlWithBr(item.othercredits, { linkify: true })}</p>
-						<p>${toHtmlWithBr(item.description)}</p>
-					</div>
-				</div>
-			`;
+  function esc(str) {
+    if (str == null || str === '') return '';
+    return String(str)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;');
+  }
 
-			$('#container').append(contentDiv);
-		});
-	});
-});
+  function linkify(str) {
+    return str.replace(
+      /(https?:\/\/[^\s&<>"]+)/g,
+      '<a href="$1" target="_blank" rel="noopener noreferrer">$1</a>'
+    );
+  }
 
-function zeroPad(number) {
-    return number.toString().padStart(2, '0');
-}
+  function toHtml(str, withLink) {
+    if (!str) return '';
+    const escaped = esc(str)
+      .replace(/\\n/g, '\n')
+      .replace(/\n/g, '<br>');
+    return withLink ? linkify(escaped) : escaped;
+  }
 
-// HTMLエスケープ
-function escapeHtml(str) {
-  return String(str)
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;");
-}
+  function formatDuration(sec) {
+    if (!sec || isNaN(sec)) return '';
+    const m = Math.floor(sec / 60);
+    const s = String(sec % 60).padStart(2, '0');
+    return `${m}:${s}`;
+  }
 
-// href用のエスケープ（属性値）
-function escapeAttr(str) {
-  return String(str)
-    .replace(/&/g, "&amp;")
-    .replace(/"/g, "&quot;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;");
-}
+  function renderWork(w, idx) {
+    const allImages = [
+      w.keyvisual,
+      w.subvisual01, w.subvisual02, w.subvisual03, w.subvisual04,
+    ].filter(Boolean);
 
-// すでにエスケープ済みテキスト中の URL を <a> にする
-function linkifyEscapedText(escapedText) {
-  // http(s) or www. で始まるURLをざっくり検出
-  const urlRe = /(?:https?:\/\/|www\.)[^\s<>"']+/gi;
+    const firstSrc = allImages.length > 0 ? `img/${esc(allImages[0])}` : null;
+    const mainContent = firstSrc
+      ? `<img src="${firstSrc}" alt="${esc(w.title)}" class="dome-main-img" loading="lazy">`
+      : `<div class="dome-no-image">NO IMAGE</div>`;
 
-  return escapedText.replace(urlRe, (m) => {
-    let display = m;                  // 画面表示用（すでにエスケープ済み）
-    let href = m.startsWith("www.") ? "http://" + m : m; // www.はhttp付与
-    href = escapeAttr(href);          // href属性用にエスケープ
-    return `<a href="${href}" target="_blank" rel="noopener noreferrer">${display}</a>`;
-  });
-}
+    const thumbsHtml = allImages.length > 0
+      ? `<div class="work-thumbs" role="list" aria-label="画像一覧">
+          ${allImages.map((f, i) => `
+            <button
+              class="work-thumb${i === 0 ? ' is-active' : ''}"
+              data-src="img/${esc(f)}"
+              data-alt="${i === 0 ? esc(w.title) : ''}"
+              aria-label="画像 ${i + 1}"
+              type="button"
+            ><img src="img/${esc(f)}" alt="" loading="lazy"></button>
+          `).join('')}
+        </div>`
+      : '';
 
-// 改行(\\n, \r\n, \r)を <br> に、必要に応じてURLをリンク化
-function toHtmlWithBr(text, { linkify = false } = {}) {
-  if (text == null) return "";
-  // 改行の揺れを統一 + 「文字としての \n」を実際の改行へ
-  let s = String(text)
-    .replace(/\r\n/g, "\n")
-    .replace(/\r/g, "\n")
-    .replace(/\\n/g, "\n");
+    const indexStr    = String(idx + 1).padStart(2, '0');
+    const deptHtml    = w.department  ? `<span class="work-dept">${esc(w.department)}</span>`  : '';
+    const seminarHtml = w.seminar     ? `<span class="work-seminar">${esc(w.seminar)}</span>`  : '';
+    const durHtml     = w.videoduration
+      ? `<span class="work-duration" title="上映時間">
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2"/>
+            <path d="M12 7v5l3 2" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          ${formatDuration(w.videoduration)}
+        </span>` : '';
+    const creditsHtml = w.othercredits
+      ? `<p class="work-credits">${toHtml(w.othercredits, true)}</p>` : '';
+    const webHtml     = w.website
+      ? `<a class="work-website" href="${esc(w.website)}" target="_blank" rel="noopener noreferrer">${esc(w.website)}</a>`
+      : '';
 
-  // まず全文をエスケープ
-  s = escapeHtml(s);
+    return `
+      <article class="work-card" id="work-${indexStr}">
+        <div class="work-visual">
+          <div class="dome-image">${mainContent}</div>
+          ${thumbsHtml}
+        </div>
+        <div class="work-info">
+          <p class="work-index">No.${indexStr}</p>
+          <div class="work-meta">
+            <span class="badge badge-musabi">${esc(w.school)}</span>
+            ${deptHtml}
+            ${seminarHtml}
+            ${durHtml}
+          </div>
+          <h3 class="work-title">${esc(w.title)}</h3>
+          <p class="work-author">${esc(w.name)}</p>
+          <p class="work-desc">${toHtml(w.description)}</p>
+          ${creditsHtml}
+          ${webHtml}
+        </div>
+      </article>
+    `;
+  }
 
-  // URLだけ <a> にする
-  if (linkify) s = linkifyEscapedText(s);
+  function bindThumbSwap(container) {
+    container.addEventListener('click', function (e) {
+      const thumb = e.target.closest('.work-thumb');
+      if (!thumb) return;
 
-  // 最後に <br> へ
-  return s.replace(/\n/g, "<br>");
-}
+      const card    = thumb.closest('.work-card');
+      const mainImg = card.querySelector('.dome-main-img');
+
+      if (mainImg) {
+        mainImg.src = thumb.dataset.src;
+        mainImg.alt = thumb.dataset.alt || '';
+      }
+
+      card.querySelectorAll('.work-thumb').forEach(function (t) {
+        t.classList.toggle('is-active', t === thumb);
+      });
+
+      document.dispatchEvent(new CustomEvent('dome:setTexture', {
+        detail: { src: thumb.dataset.src }
+      }));
+    });
+  }
+
+  fetch('./js/data.json')
+    .then(function (res) {
+      if (!res.ok) throw new Error('HTTP ' + res.status);
+      return res.json();
+    })
+    .then(function (works) {
+      var container = document.getElementById('works-container');
+      if (!container) return;
+      container.innerHTML = works.map(renderWork).join('');
+      bindThumbSwap(container);
+    })
+    .catch(function (err) {
+      var container = document.getElementById('works-container');
+      if (container) {
+        container.innerHTML =
+          '<p class="loading">作品データの読み込みに失敗しました。</p>';
+      }
+      console.error('data.json の読み込みエラー:', err);
+    });
+
+  /* ── ハンバーガーメニュー ── */
+  var toggle = document.getElementById('nav-toggle');
+  var menu   = document.getElementById('nav-menu');
+
+  if (toggle && menu) {
+    toggle.addEventListener('click', function () {
+      var isOpen = menu.classList.toggle('open');
+      toggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+      toggle.setAttribute('aria-label', isOpen ? 'メニューを閉じる' : 'メニューを開く');
+    });
+
+    menu.querySelectorAll('a').forEach(function (a) {
+      a.addEventListener('click', function () {
+        menu.classList.remove('open');
+        toggle.setAttribute('aria-expanded', 'false');
+        toggle.setAttribute('aria-label', 'メニューを開く');
+      });
+    });
+
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && menu.classList.contains('open')) {
+        menu.classList.remove('open');
+        toggle.setAttribute('aria-expanded', 'false');
+        toggle.setAttribute('aria-label', 'メニューを開く');
+        toggle.focus();
+      }
+    });
+  }
+
+})();

@@ -1,40 +1,177 @@
 <!DOCTYPE html>
-<html>
-	<head>
-		<meta charset="UTF-8">
-		<meta name="viewport" content="width=device-width, initial-scale=1.0">
-		<title>武蔵野美術大学 作品解説</title>
-		<link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;700&display=swap" rel="stylesheet">
-		<link rel="stylesheet" href="styles.css">
-		<script type="text/javascript" src="./js/jquery-3.7.1.min.js"></script>
-	</head>
-	<body>
-		<h1>なかのZERO<br>メディア芸術プログラム2025<br/>フルドーム映像体験</h1>
-		<h2>会場＆上映スケジュール</h2>
-		<div class="event-info">
-			<div class="schedule">
-				<p class="schedule-text">8/30（<span style="color: rgb(62, 95, 214);">土</span>）10:00～19:00<span class="schedule-musabi">（①10:00~12:00 ②13:00~15:00 ③17:00~19:00）</span></p>
-				<p class="schedule-text">8/31（<span style="color: rgb(214, 62, 62);">日</span>）10:00～19:00<span class="schedule-musabi">（①10:00~12:00 ②13:00~15:00 ③17:00~19:00）</span></p>
-				<p>①中野ドローンクラブ：約20分<br>②武蔵野美術大学：約40分<br>③東京工芸大学 映像学科：約8分<br>④玉川大学：約13分<br>⑤東京工芸大学 アニメーション学科：約16分<br>⑥東京工芸大学 デザイン学科：約24分</p>
-				<p class="schedule-notes-text">※1日3回各2時間、()内の時間に上映の予定です。途中入退場自由です。<br>※2時間の中で、中野ドローンクラブ、武蔵野美術大学、東京工芸大学 映像学科、玉川大学、東京工芸大学 アニメーション学科、東京工芸大学 デザイン学科 の作品が続けて上映されます。<br>※12:00~13:00と15:00~17:00の間は上映休止となります。上映休止時間はプラネタリウムには入れませんのでお気をつけてください。<br>※なかのZEROメディア芸術プログラム2025は8/30～9/1開催の予定ですが、フルドーム映像体験は、8/30,31のみです。</p>
-			</div>
-			<div>
-				<p>会場：なかのZEROプラネタリウム<br>出展：玉川大学、東京工芸大学、武蔵野美術大学、NPO法人中野ドローンクラブ</p>
-				<p></p>
-			</div>
-			<div class="event-info-web">
-				<p>なかのZERO 全天周ドーム映像体験 ☞</p>
-				<a href="https://www.nicesacademia.jp/event/%E3%81%AA%E3%81%8B%E3%81%AEzero%E3%83%A1%E3%83%87%E3%82%A3%E3%82%A2%E8%8A%B8%E8%A1%93%E3%83%97%E3%83%AD%E3%82%B0%E3%83%A9%E3%83%A0%E2%98%86%E5%BD%A1/">イベント詳細</a>
-			</div>		
-		</div>
-		<h2>武蔵野美術大学 作品解説</h2>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>武蔵野美術大学 なかのZERO メディア芸術プログラム2025</title>
+  <meta name="description" content="なかのZEROプラネタリウムで体験するフルドーム映像アートの祭典。武蔵野美術大学 作品解説ページ。2025年8月30日・31日開催。入場無料。">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
 
-		<div id="container"></div>
-		
-    	<table class="art-table">				
-		</table>
-    	
-		<script type="text/javascript" src="./js/main.js"></script>
-		
-	</body>
+  <canvas id="dome-canvas"></canvas>
+
+  <nav id="nav">
+    <div class="nav-inner">
+      <a href="#" class="nav-logo">
+        <span class="nav-logo-main">なかのZERO メディア芸術プログラム 2025</span>
+        <span class="nav-logo-sub">武蔵野美術大学 作品解説</span>
+      </a>
+      <button id="nav-toggle" class="nav-toggle" aria-label="メニューを開く" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+      <ul id="nav-menu" class="nav-menu" role="list">
+        <li><a href="#about">About</a></li>
+        <li><a href="#works">Works</a></li>
+        <li><a href="#schedule">Schedule</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <main>
+
+    <section id="hero" aria-label="メインビジュアル">
+      <div class="hero-inner">
+        <p class="hero-label">フルドーム映像体験</p>
+        <h1 class="hero-title">
+          なかのZERO<br>
+          <em>メディア芸術</em><br>
+          プログラム 2025
+        </h1>
+        <ul class="hero-meta" role="list">
+          <li>2025.08.30 sat — 08.31 sun</li>
+          <li>なかのZERO プラネタリウム</li>
+          <li>入場無料</li>
+        </ul>
+        <a href="#about" class="hero-scroll" aria-label="下にスクロール">
+          <svg width="28" height="28" viewBox="0 0 28 28" fill="none" aria-hidden="true">
+            <path d="M14 6v16M6 14l8 8 8-8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </a>
+      </div>
+    </section>
+
+    <section id="about">
+      <div class="container">
+        <h2 class="section-heading">About</h2>
+        <div class="about-grid">
+          <div class="about-overview">
+            <p>なかのZEROメディア芸術プログラムは、中野区立なかのZEROのプラネタリウムを舞台に、大学生が制作したフルドーム映像作品を上映するイベントです。このページでは武蔵野美術大学の学生による全18作品を紹介します。360度のドームスクリーンに広がる映像の世界を、ぜひ体験しにきてください。</p>
+          </div>
+          <dl class="info-list">
+            <div class="info-row">
+              <dt>会期</dt>
+              <dd>2025年8月30日（土）・31日（日）</dd>
+            </div>
+            <div class="info-row">
+              <dt>会場</dt>
+              <dd>
+                なかのZEROプラネタリウム
+                <span class="info-sub">東京都中野区中野2-9-7</span>
+              </dd>
+            </div>
+            <div class="info-row">
+              <dt>主催</dt>
+              <dd>なかのZERO</dd>
+            </div>
+            <div class="info-row">
+              <dt>出展</dt>
+              <dd>玉川大学、東京工芸大学、武蔵野美術大学、NPO法人中野ドローンクラブ</dd>
+            </div>
+            <div class="info-row">
+              <dt>開催時間</dt>
+              <dd>10:00 — 19:00（1日3回公演）</dd>
+            </div>
+            <div class="info-row">
+              <dt>入場</dt>
+              <dd>無料</dd>
+            </div>
+          </dl>
+        </div>
+        <div class="about-schools">
+          <h3 class="about-schools-label">掲載校</h3>
+          <ul class="school-list" role="list">
+            <li class="badge badge-musabi">武蔵野美術大学</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section id="works">
+      <div class="container">
+        <h2 class="section-heading">Works</h2>
+        <div id="works-container" class="works-grid">
+          <p class="loading">読み込み中…</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="schedule">
+      <div class="container">
+        <h2 class="section-heading">Schedule</h2>
+        <div class="schedule-content">
+          <div class="schedule-days">
+            <div class="schedule-day">
+              <p class="schedule-date">8/30 <span class="day-sat">土</span></p>
+              <p class="schedule-time">10:00 — 19:00</p>
+            </div>
+            <div class="schedule-day">
+              <p class="schedule-date">8/31 <span class="day-sun">日</span></p>
+              <p class="schedule-time">10:00 — 19:00</p>
+            </div>
+          </div>
+          <dl class="info-list schedule-sessions">
+            <div class="info-row">
+              <dt>第1回</dt>
+              <dd>10:00 — 12:00</dd>
+            </div>
+            <div class="info-row">
+              <dt>第2回</dt>
+              <dd>13:00 — 15:00</dd>
+            </div>
+            <div class="info-row">
+              <dt>第3回</dt>
+              <dd>17:00 — 19:00</dd>
+            </div>
+          </dl>
+          <p class="schedule-notes">
+            ※1日3回各2時間の上映予定です。途中入退場自由です。<br>
+            ※各回の中で複数校の作品が続けて上映されます。<br>
+            ※12:00〜13:00と15:00〜17:00は上映休止となります。休止時間はプラネタリウムに入れません。<br>
+            ※なかのZEROメディア芸術プログラム2025は8/30〜9/1開催の予定ですが、フルドーム映像体験は8/30・31のみです。
+          </p>
+          <div class="program-list">
+            <h3 class="program-list-title">上映プログラム（各回）</h3>
+            <ul role="list">
+              <li class="program-item"><span class="program-org">中野ドローンクラブ</span><span class="program-dur">約20分</span></li>
+              <li class="program-item program-item--musabi"><span class="program-org program-musabi">武蔵野美術大学</span><span class="program-dur">約40分</span></li>
+              <li class="program-item"><span class="program-org">東京工芸大学 映像学科</span><span class="program-dur">約8分</span></li>
+              <li class="program-item"><span class="program-org">玉川大学</span><span class="program-dur">約13分</span></li>
+              <li class="program-item"><span class="program-org">東京工芸大学 アニメーション学科</span><span class="program-dur">約16分</span></li>
+              <li class="program-item"><span class="program-org">東京工芸大学 デザイン学科</span><span class="program-dur">約24分</span></li>
+            </ul>
+          </div>
+          <div class="event-link">
+            <a href="https://www.nicesacademia.jp/event/%E3%81%AA%E3%81%8B%E3%81%AEzero%E3%83%A1%E3%83%87%E3%82%A3%E3%82%A2%E8%8A%B8%E8%A1%93%E3%83%97%E3%83%AD%E3%82%B0%E3%83%A9%E3%83%A0%E2%98%86%E5%BD%A1/" target="_blank" rel="noopener noreferrer">なかのZERO 全天周ドーム映像体験 イベント詳細 →</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer>
+    <div class="container">
+      <p class="footer-title">なかのZERO メディア芸術プログラム 2025 — 武蔵野美術大学</p>
+      <p class="footer-venue">なかのZEROプラネタリウム　東京都中野区中野2-9-7</p>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.min.js"></script>
+  <script src="js/dome.js"></script>
+  <script src="js/main.js"></script>
+</body>
 </html>
