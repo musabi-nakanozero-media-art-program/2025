@@ -163,10 +163,12 @@ ul[role="list"], ol[role="list"] { list-style: none; }
   margin-top: var(--nav-h);
 }
 .hero-label {
-  font-size: 0.75rem;
+  font-size: 1.1rem;
   letter-spacing: 0.22em;
   color: var(--accent);
   margin-bottom: 1.75rem;
+  font-weight: 700;
+  text-shadow: 0 0 24px rgba(104, 175, 255, 0.75), 0 1px 8px rgba(0, 0, 0, 0.9);
 }
 .hero-title {
   font-size: clamp(2rem, 7.5vw, 5rem);
@@ -211,7 +213,7 @@ section:not(#hero) {
   padding: 5rem 0;
   border-top: 1px solid var(--border);
 }
-#about    { background: var(--bg-2); }
+#about    { background: rgba(9, 9, 24, 0.85); }
 #works    { background: transparent; }
 #schedule { background: var(--bg-2); }
 
@@ -259,7 +261,7 @@ section:not(#hero) {
 .info-row:first-child { border-top: 1px solid var(--border); }
 dt {
   font-size: 0.72rem;
-  color: var(--fg-dim);
+  color: var(--fg-mid);
   letter-spacing: 0.08em;
   padding-top: 0.1em;
 }
@@ -320,9 +322,14 @@ dd {
   display: flex;
   flex-direction: column;
   gap: 1.25rem;
-  background: rgba(22, 22, 68, 0.78);
+  background: rgba(22, 22, 68, 0.55);
   border: 1px solid var(--border);
   padding: 1.5rem;
+  transition: border-color 0.4s, box-shadow 0.4s;
+}
+.work-card:target {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 1px var(--accent), 0 0 24px rgba(104, 175, 255, 0.18);
 }
 
 /* Domemaster circular image */
@@ -355,15 +362,16 @@ dd {
   letter-spacing: 0.12em;
 }
 
-/* サムネイルストリップ（最大5枚） */
+/* サムネイルストリップ（最大5枚・中央揃え） */
 .work-thumbs {
-  display: grid;
-  grid-auto-flow: column;
-  grid-auto-columns: 1fr;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
   gap: 0.45rem;
   margin-top: 0.65rem;
 }
 .work-thumb {
+  flex: 0 0 calc((100% - 4 * 0.45rem) / 5);
   aspect-ratio: 1 / 1;
   border-radius: 50%;
   overflow: hidden;
@@ -372,7 +380,6 @@ dd {
   padding: 0;
   cursor: pointer;
   transition: border-color 0.2s, opacity 0.2s;
-  min-width: 0;
 }
 .work-thumb img {
   width: 100%;
@@ -445,14 +452,15 @@ dd {
 }
 .work-desc {
   font-size: 0.875rem;
-  color: var(--fg-mid);
+  color: var(--fg);
   line-height: 1.75;
   margin-top: 0.25rem;
   overflow-wrap: anywhere;
+  opacity: 0.85;
 }
 .work-credits {
   font-size: 0.78rem;
-  color: var(--fg-dim);
+  color: var(--fg-mid);
   line-height: 1.65;
   margin-top: 0.25rem;
   overflow-wrap: anywhere;

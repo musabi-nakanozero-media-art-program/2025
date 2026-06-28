@@ -137,6 +137,20 @@
       if (!container) return;
       container.innerHTML = works.map(renderWork).join('');
       bindThumbSwap(container);
+
+      /* ── ハッシュURLで特定作品にスクロール ── */
+      function scrollToHash() {
+        var hash = window.location.hash;
+        if (!hash || !/^#work-\d+$/.test(hash)) return;
+        var target = document.querySelector(hash);
+        if (!target) return;
+        var navH = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--nav-h')) || 64;
+        var top = target.getBoundingClientRect().top + window.pageYOffset - navH - 24;
+        window.scrollTo({ top: top, behavior: 'smooth' });
+      }
+      /* レイアウト確定後に実行 */
+      requestAnimationFrame(function () { setTimeout(scrollToHash, 50); });
+      window.addEventListener('hashchange', scrollToHash);
     })
     .catch(function (err) {
       var container = document.getElementById('works-container');

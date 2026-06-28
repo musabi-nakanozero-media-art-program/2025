@@ -101,7 +101,7 @@
     return tex;
   }
 
-  /* ── シアター座席テクスチャ（天底俯瞰） ── */
+  /* ── シアター座席テクスチャ（全席が正面＝キャンバス下方を向く） ── */
   function buildSeatTexture() {
     var S = 1024, CX = S / 2, CY = S / 2, R = S / 2;
     var tc = document.createElement('canvas');
@@ -131,10 +131,11 @@
     ctx.fillStyle = amb;
     ctx.fillRect(0, 0, S, S);
 
-    var ROWS   = 8;
-    var IN_R   = 0.17 * R;
-    var OUT_R  = 0.74 * R;
-    var AISLE  = Math.PI * 1.5;
+    var ROWS    = 8;
+    var IN_R    = 0.17 * R;
+    var OUT_R   = 0.74 * R;
+    /* 通路: 後方中央（キャンバス上方 = 3π/2）に一本 */
+    var AISLE   = Math.PI * 1.5;
     var AISLE_W = 0.06;
 
     for (var row = 0; row < ROWS; row++) {
@@ -161,7 +162,8 @@
 
         ctx.save();
         ctx.translate(sx, sy);
-        ctx.rotate(ang + Math.PI / 2);
+        /* 全席を正面（キャンバス下方）に向ける — 固定回転 */
+        ctx.rotate(0);
 
         ctx.fillStyle = cBody;
         ctx.beginPath();
@@ -220,20 +222,22 @@
     '  float theta = atan(dir.z, dir.x);',
     '',
     '  /* 上半球: ドームマスター画像 (クロスフェード) */',
-    '  float r_dome = phi / (PI * 0.5) * 0.5;',
+    '  float r_dome  = phi / (PI * 0.5) * 0.5;',
     '  vec2  uv_dome = vec2(0.5 + r_dome * cos(theta), 0.5 + r_dome * sin(theta));',
     '  vec4  domeCol = mix(texture2D(uTexA, uv_dome), texture2D(uTexB, uv_dome), uBlend);',
     '',
     '  /* 下半球: 座席テクスチャ */',
-    '  float r_seat = (PI - phi) / (PI * 0.5) * 0.5;',
+    '  float r_seat  = (PI - phi) / (PI * 0.5) * 0.5;',
     '  vec2  uv_seat = vec2(0.5 + r_seat * cos(theta), 0.5 + r_seat * sin(theta));',
     '  vec4  seatCol = texture2D(uSeatTex, uv_seat);',
     '',
-    '  /* 水平線付近でブレンド */',
-    '  float hBlend = smoothstep(PI * 0.46, PI * 0.56, phi);',
-    '  vec4  color  = mix(domeCol, seatCol, hBlend);',
+    '  /* 水平線を黒でブリッジ: 上側フェード(UV歪み隠蔽) → 黒 → 下側フェード(座席出現) */',
+    '  float upperFade = 1.0 - smoothstep(PI * 0.40, PI * 0.50, phi);',
+    '  float lowerFade = smoothstep(PI * 0.50, PI * 0.56, phi);',
+    '  vec4  color = mix(vec4(0.0, 0.0, 0.0, 1.0), domeCol, upperFade);',
+    '  color = mix(color, seatCol, lowerFade);',
     '',
-    '  /* ドームメッシュ グリッドライン (上半球のみ) */',
+    '  /* グリッドライン (上半球・フェード範囲内のみ) */',
     '  float LAT_STEP = PI / 9.0;',
     '  float LON_STEP = PI / 6.0;',
     '  float LW       = 0.003;',
@@ -246,7 +250,7 @@
     '  float lonDist = min(lonMod, LON_STEP - lonMod);',
     '  float lonLine = (1.0 - smoothstep(0.0, LW, lonDist)) * smoothstep(0.0, 0.08, phi);',
     '',
-    '  float grid = max(latLine, lonLine) * (1.0 - hBlend) * 0.12;',
+    '  float grid = max(latLine, lonLine) * upperFade * 0.12;',
     '  color = mix(color, vec4(0.5, 0.68, 1.0, 1.0), grid);',
     '',
     '  gl_FragColor = color;',
