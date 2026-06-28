@@ -223,7 +223,7 @@
     '',
     '  /* 上半球: ドームマスター画像 (クロスフェード) */',
     '  float r_dome  = phi / (PI * 0.5) * 0.5;',
-    '  vec2  uv_dome = vec2(0.5 + r_dome * cos(theta), 0.5 + r_dome * sin(theta));',
+    '  vec2  uv_dome = vec2(0.5 - r_dome * cos(theta), 0.5 + r_dome * sin(theta));',
     '  vec4  domeCol = mix(texture2D(uTexA, uv_dome), texture2D(uTexB, uv_dome), uBlend);',
     '',
     '  /* 下半球: 座席テクスチャ */',

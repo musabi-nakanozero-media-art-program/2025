@@ -161,6 +161,7 @@ ul[role="list"], ol[role="list"] { list-style: none; }
   text-align: center;
   padding: 0 1.5rem;
   margin-top: var(--nav-h);
+  user-select: none;
 }
 .hero-label {
   font-size: 1.1rem;
@@ -182,6 +183,9 @@ ul[role="list"], ol[role="list"] { list-style: none; }
 .hero-title em {
   font-style: normal;
   color: var(--accent);
+}
+.hero-year {
+  color: var(--accent-soft);
 }
 .hero-meta {
   display: flex;
